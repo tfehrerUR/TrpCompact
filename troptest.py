@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import scipy.signal as sig
 
 xlim = [0,20000]
-xmid = 30
+xmid = 25
 ipos = np.loadtxt('E0=3_frequency_data.dat', usecols=(0,5,6))
 ineg = np.loadtxt('E0=-3_frequency_data.dat', usecols=(0,5,6))
 mnum = np.where(ipos[:,0]==0)
@@ -30,8 +30,7 @@ alp = np.shape(maxindpos)[0]
 aln = np.shape(maxindneg)[0]
 maxpos = np.empty((alp,2))
 maxneg = np.empty((aln,2))
-trp1 = np.empty((alp,2))
-trp2 = np.empty((aln,2))
+trp1 = np.empty((alp+aln,2))
 
 for i, z in enumerate(maxindpos):
     maxpos[i,0] = tropism[z,0]
@@ -46,8 +45,10 @@ for i, z in enumerate(maxindpos):
     trp1[i,1] = (iposvals[z,0]-inegvals[z,0])/(iposvals[z,0]+inegvals[z,0])
 
 for i, z in enumerate(maxindneg):
-    trp2[i,0] = tropism[z,0]
-    trp2[i,1] = (iposvals[z,0]-inegvals[z,0])/(iposvals[z,0]+inegvals[z,0])
+    trp1[alp+i,0] = tropism[z,0]
+    trp1[alp+i,1] = (iposvals[z,0]-inegvals[z,0])/(iposvals[z,0]+inegvals[z,0])
+
+trp2 = np.sort(trp1, axis=0)
 
 fig, axs = plt.subplots(2, 1)
 axs[0].semilogy(maxpos[xlim[0]:xmid,0], maxpos[xlim[0]:xmid,1], color = 'blue', label = 'positive E0')
@@ -57,8 +58,7 @@ axs[0].set_ylabel('Intensity of maximum values')
 axs[0].grid(True)
 axs[0].legend(loc='upper right')
 
-axs[1].scatter(trp1[xlim[0]:xmid,0], trp1[xlim[0]:xmid,1], s=5, color = 'blue', label = 'positive E0')
-axs[1].scatter(trp2[xlim[0]:xmid,0], trp2[xlim[0]:xmid,1], s=5, color = 'orange', label = 'negative E0')
+axs[1].scatter(trp1[xlim[0]:xmid,0], trp1[xlim[0]:xmid,1], s=5, color = 'blue', label = 'Local tropisms')
 axs[1].set_xlabel('HHG frequency in f/f0')
 axs[1].set_ylabel('Local tropisms')
 axs[1].grid(True)
