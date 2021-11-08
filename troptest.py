@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import scipy.signal as sig
 
 xlim = [0,20000]
-xmid = 25
+xmid = 2500
 ipos = np.loadtxt('E0=3_frequency_data.dat', usecols=(0,5,6))
 ineg = np.loadtxt('E0=-3_frequency_data.dat', usecols=(0,5,6))
 mnum = np.where(ipos[:,0]==0)
